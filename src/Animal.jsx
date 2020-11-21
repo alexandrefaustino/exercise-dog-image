@@ -22,6 +22,23 @@ class Animal extends React.Component {
     })
   }
 
+  componentDidUpdate() {
+    if (this.state.animal) {
+      localStorage.setItem("dogURL", this.state.animal.message);
+      const dogBreed = this.state.animal.message.split("/")[4];
+      alert(dogBreed);      
+    }    
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.animal) {
+      if (nextState.animal.message.includes("terrier")) {
+        return false;
+      }
+    }    
+    return true;
+  }
+
   componentDidMount() {
     this.fetchAnimal();
   }

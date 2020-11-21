@@ -3,59 +3,43 @@ import React from 'react';
 class Animal extends React.Component {
   constructor() {
     super()
-    this.fetchAnimal = this.fetchAnimal.bind(this);
-    this.saveAnimal = this.saveAnimal.bind(this);
+    this.fetchAnimal = this.fetchAnimal.bind(this);    
     this.state = {
       animal: undefined,
-      loading: true,
-      storeAnimal: []
+      loading: true,      
     }
   }
 
   async fetchAnimal() {
-    this.setState(
-      { loading: true },
-      async () => {
-        const urlAPI = 'https://dog.ceo/api/breeds/image/random';
-        const requestReturn = await fetch(urlAPI);
-        const objectAnimal = await requestReturn.json();
-        if (!objectAnimal.message.includes('terrier')) {
-          this.setState({
-            loading: false,
-            animal: objectAnimal
-          })
-        } else alert(objectAnimal);
-      }
-    )    
+    this.setState({loading: true}, async () => {
+      const urlAPI = 'https://dog.ceo/api/breeds/image/random';
+      const requestReturn = await fetch(urlAPI);
+      const objectAnimal = await requestReturn.json();                   
+      this.setState({
+        loading: false, 
+        animal: objectAnimal
+      })    
+    })
   }
 
   componentDidMount() {
     this.fetchAnimal();
   }
 
-  saveAnimal(){
-    this.setState(({storeAnimal, animal}) => ({
-      storeAnimal: [...storeAnimal, animal]
-    }))
-    this.fetchAnimal();
-  }
-
   renderAnimalElement() {
     return(
       <div>
+        <h1>Cães</h1>
         <img className="img" src={this.state.animal.message} alt="animais"/> <br/>   
-        <button type="button" onClick={this.saveAnimal}>Salvar</button>
+        <button type="button" onClick={this.fetchAnimal}>Next Dog</button>        
       </div>
     );
   }
   render() {
-    const { storeAnimal, loading } = this.state;
+    const { loading } = this.state;
     const loadingElement = <span>Loading...</span>;
     return( 
       <div className="App">
-        <span>
-          {storeAnimal.map(({ message }) => (<img className="img" src={message} alt=""/>))}
-        </span>
         {
           (loading) ? loadingElement : this.renderAnimalElement() 
         } 

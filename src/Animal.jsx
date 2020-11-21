@@ -13,12 +13,18 @@ class Animal extends React.Component {
   }
 
   async fetchAnimal() {
-    const urlAPI = 'https://dog.ceo/api/breeds/image/random';
-    const requestReturn = await fetch(urlAPI);
-    const objectAnimal = await requestReturn.json();
-    this.setState({
-      animal: objectAnimal
-    })
+    this.setState(
+      { loading: true },
+      async () => {
+        const urlAPI = 'https://dog.ceo/api/breeds/image/random';
+        const requestReturn = await fetch(urlAPI);
+        const objectAnimal = await requestReturn.json();
+        this.setState({
+          loading: false,
+          animal: objectAnimal
+        })
+      }
+    )    
   }
 
   componentDidMount() {
@@ -41,7 +47,7 @@ class Animal extends React.Component {
     );
   }
   render() {
-    const { storeAnimal, animal } = this.state;
+    const { storeAnimal, loading } = this.state;
     const loadingElement = <span>Loading...</span>;
     return( 
       <div className="App">
@@ -49,7 +55,7 @@ class Animal extends React.Component {
           {storeAnimal.map(({ message }) => (<img className="img" src={message} alt=""/>))}
         </span>
         {
-          (animal) ? this.renderAnimalElement() : <span>{loadingElement}</span>
+          (loading) ? loadingElement : this.renderAnimalElement() 
         } 
       </div>
     )

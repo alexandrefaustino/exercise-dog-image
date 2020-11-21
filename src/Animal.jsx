@@ -19,10 +19,12 @@ class Animal extends React.Component {
         const urlAPI = 'https://dog.ceo/api/breeds/image/random';
         const requestReturn = await fetch(urlAPI);
         const objectAnimal = await requestReturn.json();
-        this.setState({
-          loading: false,
-          animal: objectAnimal
-        })
+        if (!objectAnimal.message.includes('terrier')) {
+          this.setState({
+            loading: false,
+            animal: objectAnimal
+          })
+        } else alert(objectAnimal);
       }
     )    
   }
